@@ -1,161 +1,96 @@
-# Jekyll Doc Theme
+# Easy Markdown to Github Pages
 
-Go to [the website](https://aksakalli.github.io/jekyll-doc-theme/) for detailed information and demo.
+## Introduction
 
-## Running locally
+This little guide demonstrates how to turn any [Github](http://github.com) repository with a bunch of [Markdown](https://en.wikipedia.org/wiki/Markdown) files into a simple website using [Github Pages](https://pages.github.com/) and [Jekyll](https://jekyllrb.com/).
 
-You need Ruby and gem before starting, then:
+* You don't need to use the command line or anything other than your browser.
+* It doesn't require any knowledge in Jekyll.
+* It's completely compatible with any bunch of markdown files you already have in any existing repository without any modification to those files. That includes the basic `README.md` almost all repositories contain.
+* The markdown files will remain just as readable and usable in Github than in your website.
 
-```bash
-# install bundler
-gem install bundler
+In fact this guide uses the same configuration and can be read both in Github and in Github Pages, at your preference:
 
-# clone the project
-git clone https://github.com/aksakalli/jekyll-doc-theme.git
-cd jekyll-doc-theme
+* [Here is the link to the Github version](https://github.com/nicolas-van/easy-markdown-to-github-pages)
+* [Here is the link to the Github Pages version](https://nicolas-van.github.io/easy-markdown-to-github-pages/)
 
-# install dependencies
-bundle install
+## Step by step instructions
 
-# run jekyll with dependencies
-bundle exec jekyll serve
+### Determine the repository where you want to activate Github Pages
+
+You can of course create a new repository if you want.
+
+### Create the `_config.yml` file
+
+That file should be created on the root of your repository. Here is some content to copy-paste in it:
+
+```yaml
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+include:
+  - CONTRIBUTING.md
+  - README.md
+  - LICENSE.md
+  - COPYING.md
+  - CODE_OF_CONDUCT.md
+  - CONTRIBUTING.md
+  - ISSUE_TEMPLATE.md
+  - PULL_REQUEST_TEMPLATE.md
 ```
 
-### Theme Assets
+It's basically just a few tuning of Github Pages' default configuration to have a better handling of Markdown files.
 
-As of the move to support [Github Pages](https://pages.github.com/) a number of files have been relocated to the `/asset` folder.
-- css/
-- fonts/
-- img/
-- js/
-- 404.html
-- allposts.html
-- search.json
+### Activate Github Pages in your repository configuration
 
-## Docker
+On the Github page of your project go into `Settings > Options > Github Pages`:
 
-Alternatively, you can deploy it using the multi-stage [Dockerfile](Dockerfile)
-that serves files from Nginx for better performance in production.
+![](./printscreen1.png)
 
-Build the image for your site's `JEKYLL_BASEURL`:
+In the `Source` option, select `master branch` then `Save`:
 
-```
-docker build --build-arg JEKYLL_BASEURL="/your-base/url" -t jekyll-doc-theme .
-```
+![](./printscreen2.png)
 
-(or leave it empty for root: `JEKYLL_BASEURL=""`) and serve it:
+You must also choose a theme:
 
-```
-docker run -p 8080:80 jekyll-doc-theme
-```
+![](./printscreen3.png)
 
-## Github Pages
+That's it! Now you can just use the link provided by Github to access your website:
 
-The theme is also available to [Github Pages](https://pages.github.com/) by making use of the [Remote Theme](https://github.com/benbalter/jekyll-remote-theme) plugin:
+![](./printscreen4.png)
 
-**Gemfile**
-```
-# If you want to use GitHub Pages, remove the "gem "jekyll"" above and
-# uncomment the line below. To upgrade, run `bundle update github-pages`.
-gem "github-pages", group: :jekyll_plugins
-```
+## Usage guide
 
-**_config.yml**
-```
-# Configure the remote_theme plugin with the gh-pages branch
-# or the specific tag
-remote_theme: aksakalli/jekyll-doc-theme@gh-pages   
-```
+* Any markdown file in your repository will display in your Github Pages website. You just have to use the same path to access it and replace the `.md` extension by `.html`.
+* To make links between your Markdown files just use a relative path to the other Markdown file. The configuration you copy pasted in your `_config.yml` provides a plugin to convert those URLs. So your Markdown files will have correct links both in Github and Github Pages.
+* The index page of your website can be a `index.md` file or a `README.md` file. If both exists the `index.md` file has priority.
+* You should be able to use any [Github Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
-### Theme Assets
+## Known differences between Github and Github Pages
 
-Files from your project will override any theme file with the same name.  For example, the most comment use case for this, would be to modify your sites theme or colors.   To do this, the following steps should be taken:
+* No automatic links with Github Pages. The Github Markdown renderer can automatically detect a simple copy-pasted link and make it a clickable link. Github Pages doesn't propose a feature to reproduce that behavior, so you'll have to braces your links with the `[]()` syntax.
 
-1) Copy the contents of the `aksakalli/jekyll-doc-theme/asset/css/main.scss` to your own project (maintaining folder structure)
-2) Modify the variables you wish to use prior to the import statements, for example:
+## Recipes
 
-```
-// Bootstrap variable overrides
-$grid-gutter-width: 30px !default;
-$container-desktop: (900px + $grid-gutter-width) !default;
-$container-large-desktop: (900px + $grid-gutter-width) !default;
+Since the purpose of this guide is to demonstrate how to publish multiple Markdown files as a website but I don't have much more to say I will propose to you some delicious recipes instead:
 
-@import // Original import statement
-  {% if site.bootwatch %}
-    "bootswatch/{{site.bootwatch | downcase}}/variables",
-  {% endif %}
+* [Escalivada](./recipes/Escalivada.md)
+* [Gazpacho](./recipes/Gazpacho.md)
+* [Pasta all'amatriciana](./recipes/Pasta_all_amatriciana.md)
 
-  "bootstrap",
+## Other Github Pages related projects
 
-  {% if site.bootwatch %}
-    "bootswatch/{{site.bootwatch | downcase}}/bootswatch",
-  {% endif %}
+I'm a fan of Github Pages for the possibilities it offers to anyone to publish a website for free. I have multiple projects that could be of interest if that's your case too:
 
-  "syntax-highlighting",
-  "typeahead",
-  "jekyll-doc-theme"
-;
+* [Bootstrap 4 Github Pages](https://nicolas-van.github.io/bootstrap-4-github-pages/)
+* [Parcel Github Pages Boilerplate](https://github.com/nicolas-van/parcel-github-pages-boilerplate)
 
-// More custom overrides.
-```
+## Contributing
 
-3) Import or override any other theme styles after the standard imports
-
-## Projects using Jekyll Doc Theme
-
-* http://teavm.org/
-* https://ogb.stanford.edu/
-* https://griddb.org/
-* https://su2code.github.io/
-* https://contextmapper.org/
-* https://launchany.github.io/mvd-template/
-* https://knowit.github.io/kubernetes-workshop/
-* https://rec.danmuji.org/
-* https://nethesis.github.io/icaro/
-* http://ai.cs.ucl.ac.uk/
-* http://tizonia.org
-* https://lakka-switch.github.io/documentation/
-* https://cs.anu.edu.au/cybersec/issisp2018/
-* http://www.channotation.org/
-* http://nemo.apache.org/
-* https://csuf-acm.github.io/
-* https://extemporelang.github.io/
-* https://media-ed-online.github.io/intro-web-dev-2018spr/
-* https://midlevel.github.io/MLAPI/
-* https://pulp-platform.github.io/ariane/docs/home/
-* https://koopjs.github.io/
-* https://developer.apiture.com/
-* https://contextmapper.github.io/
-* https://www.bruttin.com/CosmosDbExplorer/
-* http://mosaic-lopow.github.io/dash7-ap-open-source-stack/
-* http://www.vstream.ml/
-* http://docs.fronthack.com/
-* https://repaircafeportsmouth.org.uk/
-* http://brotherskeeperkenya.com/
-* https://hschne.at/Fluentast/
-* https://zoe-analytics.eu/
-* https://uli.kmz-brno.cz/
-* https://lime.software/
-* https://weft.aka.farm
-* https://microros.github.io/
-* https://citystoriesucla.github.io/citystories-LA-docs
-* http://lessrt.org/
-* http://kivik.io/
-* https://www.iot-kit.nl/
-* http://justindietz.com/
-* https://universalsplitscreen.github.io/
-* https://docs.oneflowcloud.com/
-* https://actlist.silentsoft.org/
-* https://teevid.github.io
-* https://developer.ipums.org
-* https://osmpersia.github.io (right-to-left)
-* https://ecmlpkdd2019.org
-* https://idle.land
-* https://mqless.com
-* https://muict-seru.github.io/
-* https://www.invoice-x.org
-* https://www.devops.geek.nz
+See the [Contribution Guide](./CONTRIBUTING.md).
 
 ## License
 
-Released under [the MIT license](LICENSE).
+See the [License File](./LICENSE.md).
