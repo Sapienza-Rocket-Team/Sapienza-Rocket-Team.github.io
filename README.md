@@ -94,3 +94,7 @@ See the [Contribution Guide](./CONTRIBUTING.md).
 ## License
 
 See the [License File](./LICENSE.md).
+
+## My Photo
+
+![](./media/photo_2022-09-23_23-07-19.jpg)
